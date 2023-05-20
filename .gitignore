@@ -48,4 +48,4 @@ captures/
 !gradle/wrapper/gradle-wrapper.jar
 
 ### no proxy on github ###
-#gradle.properties
+gradle.properties

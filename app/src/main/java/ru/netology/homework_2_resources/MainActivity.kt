@@ -3,11 +3,14 @@ package ru.netology.homework_2_resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import ru.netology.homework_2_resources.adapter.PostAdapter
+import ru.netology.homework_2_resources.adapter.PostListener
 import ru.netology.homework_2_resources.dto.Post
 import ru.netology.homework_2_resources.databinding.ActivityMainBinding
 import ru.netology.homework_2_resources.databinding.CardPostBinding
+import ru.netology.homework_2_resources.utils.AndroidUtils
 import ru.netology.homework_2_resources.utils.StringsVisability
 import ru.netology.homework_2_resources.viewmodel.PostViewModel
 
@@ -39,12 +42,51 @@ class MainActivity : AppCompatActivity() {
         val viewModel: PostViewModel by viewModels() // функция «by viewModels()» означает, что сколько бы раз activity не пересоздавался, мы будем получать одну и ту же ссылку на одну и ту же модель (ViewModel)
 
         val adapter = PostAdapter(
-            onLikeClicked = {
-                viewModel.likeById(it.id)
-        },
-            onShareClicked = {
-                viewModel.share(it.id)
-            })
+            object : PostListener {
+                override fun onLike(post: Post) {
+                    viewModel.likeById(post.id)
+                }
+
+                override fun onShare(post: Post) {
+                    viewModel.share(post.id)
+                }
+
+                override fun onRemove(post: Post) {
+                    viewModel.removeById(post.id)
+                }
+
+                override fun onEdit(post: Post) {
+                    viewModel.edit(post)
+                }
+            }
+        )
+
+        /* после того, как был выбран пост для редактирования, на нем надо сфокусироваться: */
+        viewModel.edited.observe(this) {
+            if (it.id == 0L) {
+                return@observe
+            }
+            activityMainBinding.content.requestFocus()
+            activityMainBinding.content.setText(it.content)
+        }
+
+        activityMainBinding.save.setOnClickListener{
+            with(activityMainBinding.content) {
+                val content = text?.toString()
+                if (content.isNullOrBlank()) {
+                    Toast.makeText(this@MainActivity, R.string.empty_post_error, Toast.LENGTH_SHORT).show() /* "всплывашка" с предупреждением о пустом тексте */
+                    return@setOnClickListener  /* через @ собаку возвращается значение лямбда-функции */
+                }
+
+                viewModel.changeContent(content)
+                viewModel.save()
+
+                /* возвращаем все "как было" : */
+                setText("")
+                clearFocus()
+                AndroidUtils.hideKeyboard(this)
+            }
+        }
 
         viewModel.data.observe(this) { posts -> // posts это уже List<Post>. Наблюдаем (observe) за изменением data. Если оно происходит - получаем на входе объект posts...
             adapter.submitList(posts)

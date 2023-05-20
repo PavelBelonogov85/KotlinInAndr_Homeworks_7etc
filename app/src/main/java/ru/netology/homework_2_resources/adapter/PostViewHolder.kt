@@ -1,15 +1,15 @@
 package ru.netology.homework_2_resources.adapter
 
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import ru.netology.homework_2_resources.R
 import ru.netology.homework_2_resources.databinding.CardPostBinding
 import ru.netology.homework_2_resources.dto.Post
 import ru.netology.homework_2_resources.utils.StringsVisability
 
-class PostViewHolder (
+class PostViewHolder ( /* "держит" ссылку на конкретный view ; определяет КАК ее заполнять по входящим данным ; привязывает к событиям на элементах действия: sharesIcon.setOnClickListener {onShareClicked()}  */
     private val binding: CardPostBinding,
-    private val onLikeClicked: OnLikeClickListener,
-    private val onShareClicked: OnShareClickListener,
+    private val listener: PostListener
         ): ViewHolder(binding.root) { /* ссылка на конкретную вьюшку, он ее хранит и ее можно из него забрать при необходимости */
 
     fun bind(post: Post) {
@@ -43,11 +43,32 @@ class PostViewHolder (
 
             binding.likesIcon.setOnClickListener {
                 //viewModel.likeById(post.id)
-                onLikeClicked(post)
+                listener.onLike(post)
             }
             binding.sharesIcon.setOnClickListener {
                 //viewModel.share(post.id)
-                onShareClicked(post)
+                listener.onShare(post)
+            }
+
+            /* создаем меню: */
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.post_options) /* наполняем его из ресурсов */
+                    setOnMenuItemClickListener {item ->
+                        when (item.itemId) {
+                            R.id.remove -> {
+                                listener.onRemove(post)
+                                true
+                            }
+                            R.id.edit -> {
+                                listener.onEdit(post)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+
+                }.show()
             }
         }
 

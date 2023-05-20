@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">homework_2_resources</string>
+    <string name="app_name">д/з с 7ой и далее</string>
     <string name="dummy">заглушка</string>
     <string name="button_new_text">новый текст!</string>
+    <string name="remove">Удалить</string>
+    <string name="content_hint">Пишите сюда</string>
+    <string name="empty_post_error">Content must not be empty</string>
+    <string name="edit">Edit</string>
 </resources>
