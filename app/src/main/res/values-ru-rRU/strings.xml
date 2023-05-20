@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">homework_2_resources</string>
+    <string name="dummy">заглушка</string>
+    <string name="button_new_text">новый текст!</string>
+</resources>

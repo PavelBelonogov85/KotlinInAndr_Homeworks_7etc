@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ссылка на ресурсы: "@папка_тип_ресурса/имя_конкретного_ресурса" -->
+    <!-- чтобы УБРАТЬ ЗАГОЛОВОК приложения: android:theme="@style/Theme.NoActionBar -->
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Homework_2_resources"
+        tools:targetApi="31">
+        <!-- точки входа: -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"><!-- name - имя активити; exported - видно ли другим приложениям (основному ланчеру) -->
+            <intent-filter> <!-- точки входа -->
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" /><!-- видно в ланчере -->
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+    </application>
+
+</manifest>

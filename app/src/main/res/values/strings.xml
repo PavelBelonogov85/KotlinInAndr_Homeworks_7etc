@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">homework_2_resources</string>
+    <string name="dummy">text dummy</string>
+    <string name="button_new_text">new text!</string>
+</resources>
