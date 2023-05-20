@@ -3,6 +3,7 @@ package ru.netology.homework_2_resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import ru.netology.homework_2_resources.adapter.PostAdapter
@@ -63,8 +64,11 @@ class MainActivity : AppCompatActivity() {
 
         /* после того, как был выбран пост для редактирования, на нем надо сфокусироваться: */
         viewModel.edited.observe(this) {
-            if (it.id == 0L) {
+            if (it.id == 0L) { /* это новый пост - создание */
+                activityMainBinding.groupEditHeader.visibility = View.GONE // группа с отменой редактирования невидима
                 return@observe
+            } else {
+                activityMainBinding.groupEditHeader.visibility = View.VISIBLE // группа с отменой редактирования видима
             }
             activityMainBinding.content.requestFocus()
             activityMainBinding.content.setText(it.content)
@@ -87,6 +91,17 @@ class MainActivity : AppCompatActivity() {
                 AndroidUtils.hideKeyboard(this)
             }
         }
+
+        /* добавляем поведение для "своей" кнопки отмены редактирования: */
+        activityMainBinding.editCancel.setOnClickListener {
+            /* Post оставляем нетронутым как был: */
+            viewModel.editCancel()
+            /* очищаем поле с контентом и снимаем фокус, аналогично как в save.setOnClickListener : */
+            activityMainBinding.content.setText("")
+            activityMainBinding.content.clearFocus()
+            AndroidUtils.hideKeyboard(it)
+        }
+
 
         viewModel.data.observe(this) { posts -> // posts это уже List<Post>. Наблюдаем (observe) за изменением data. Если оно происходит - получаем на входе объект posts...
             adapter.submitList(posts)

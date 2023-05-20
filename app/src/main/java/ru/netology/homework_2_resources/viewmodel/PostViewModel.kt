@@ -39,6 +39,11 @@ class PostViewModel: ViewModel() {
         edited.value = post
     }
 
+    /* "своя" кнопка, отменяющая редактирование: */
+    fun editCancel() {
+        edited.value = empty /* =post.copy() */
+    }
+
     fun changeContent(content: String) {
         edited.value?.let { post ->
             if (content!=post.content) {
