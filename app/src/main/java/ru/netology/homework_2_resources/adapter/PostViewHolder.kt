@@ -1,6 +1,7 @@
 package ru.netology.homework_2_resources.adapter
 
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import ru.netology.homework_2_resources.R
 import ru.netology.homework_2_resources.databinding.CardPostBinding
@@ -24,8 +25,7 @@ class PostViewHolder ( /* "держит" ссылку на конкретный 
             published.text = post.published
             content.text = post.content
             avatar.setImageResource(R.drawable.ic_launcher_foreground)
-            likesText.text = StringsVisability.getCoolNumeralString(post.likes)
-            sharesText.text = StringsVisability.getCoolNumeralString(post.shares)
+
             viewsText.text = StringsVisability.getCoolNumeralString(post.views)
 
             // ! binding самопроизвольно меняет id элементов из snake_case в camelCase !
@@ -36,10 +36,9 @@ class PostViewHolder ( /* "держит" ссылку на конкретный 
             }*/
             // лучше всегда менять все поля, чтобы не получить по карусели предыдущую версию view, поэтому
             // лучше писать вот так:
-            likesIcon.setImageResource(
-                if (post.likedByMe) {R.drawable.ic_liked_24}
-                else {R.drawable.baseline_favorite_border_24}
-            )
+            likesIcon.isChecked = post.likedByMe
+            likesIcon.text = StringsVisability.getCoolNumeralString(post.likes)
+            sharesIcon.text = StringsVisability.getCoolNumeralString(post.shares)
 
             binding.likesIcon.setOnClickListener {
                 //viewModel.likeById(post.id)
@@ -58,17 +57,23 @@ class PostViewHolder ( /* "держит" ссылку на конкретный 
                         when (item.itemId) {
                             R.id.remove -> {
                                 listener.onRemove(post)
+                                binding.menu.isChecked = false /* развлекаемся с раскраской кнопки меню от признака Checked */
                                 true
                             }
                             R.id.edit -> {
                                 listener.onEdit(post)
+                                binding.menu.isChecked = false
                                 true
                             }
                             else -> false
                         }
                     }
+                    setOnDismissListener {
+                        binding.menu.isChecked = false
+                        true}
 
                 }.show()
+                binding.menu.isChecked = true
             }
         }
 
