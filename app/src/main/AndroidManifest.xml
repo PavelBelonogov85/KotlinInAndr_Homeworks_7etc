@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- ссылка на ресурсы: "@папка_тип_ресурса/имя_конкретного_ресурса" -->
-    <!-- чтобы УБРАТЬ ЗАГОЛОВОК приложения: android:theme="@style/Theme.NoActionBar -->
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,17 +11,39 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Homework_2_resources"
-        tools:targetApi="31">
-        <!-- точки входа: -->
+        tools:targetApi="32">
+
+        <!-- основной активити для запуска с лунчера: -->
         <activity
-            android:name=".MainActivity"
-            android:exported="true"><!-- name - имя активити; exported - видно ли другим приложениям (основному ланчеру) -->
+            android:name=".activity.MainActivity"
+            android:exported="true"> <!-- name - имя активити; exported - видно ли другим приложениям (основному ланчеру) -->
             <intent-filter> <!-- точки входа -->
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" /><!-- видно в ланчере -->
+                <category android:name="android.intent.category.LAUNCHER" /> <!-- видно в ланчере -->
             </intent-filter>
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 
+        <!-- активити с интент-фильтром для обработки "text/plain" , т.е. приема переданного (SEND - статус для отправляющего приложения) текста из других приложений: -->
+        <activity
+            android:name=".activity.IntentHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <!-- Активити для запуска явного интента: открываем заранее известную -->
+        <activity
+            android:name=".activity.NewPostActivity"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

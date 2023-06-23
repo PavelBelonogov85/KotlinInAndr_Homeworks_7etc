@@ -10,4 +10,7 @@
     <string name="menu_descr">Menu</string>
     <string name="like_descr">Like</string>
     <string name="shares_descr">shares</string>
+    <string name="chooser_share_post">Share this post</string>
+    <string name="error_empty_content">Text have to be not empty</string>
+    <string name="add_new_post">Add new post</string>
 </resources>

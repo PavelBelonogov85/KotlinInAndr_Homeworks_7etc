@@ -1,18 +1,18 @@
-package ru.netology.homework_2_resources
+package ru.netology.homework_2_resources.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import ru.netology.homework_2_resources.R
 import ru.netology.homework_2_resources.adapter.PostAdapter
 import ru.netology.homework_2_resources.adapter.PostListener
 import ru.netology.homework_2_resources.dto.Post
 import ru.netology.homework_2_resources.databinding.ActivityMainBinding
-import ru.netology.homework_2_resources.databinding.CardPostBinding
 import ru.netology.homework_2_resources.utils.AndroidUtils
-import ru.netology.homework_2_resources.utils.StringsVisability
 import ru.netology.homework_2_resources.viewmodel.PostViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -42,6 +42,12 @@ class MainActivity : AppCompatActivity() {
 
         val viewModel: PostViewModel by viewModels() // функция «by viewModels()» означает, что сколько бы раз activity не пересоздавался, мы будем получать одну и ту же ссылку на одну и ту же модель (ViewModel)
 
+        val newPostContract = registerForActivityResult(NewPostActivity.Contract) {result ->
+            result ?: return@registerForActivityResult
+            viewModel.changeContent(result)
+            viewModel.save()
+        }
+
         val adapter = PostAdapter(
             object : PostListener {
                 override fun onLike(post: Post) {
@@ -50,6 +56,14 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onShare(post: Post) {
                     viewModel.share(post.id)
+
+                    val intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, post.content)
+                        type="text/plain"
+                    }
+                    val startIntent = Intent.createChooser(intent,getString(R.string.chooser_share_post))
+                    startActivity(startIntent)
                 }
 
                 override fun onRemove(post: Post) {
@@ -63,8 +77,9 @@ class MainActivity : AppCompatActivity() {
         )
 
         /* после того, как был выбран пост для редактирования, на нем надо сфокусироваться: */
+        /*
         viewModel.edited.observe(this) {
-            if (it.id == 0L) { /* это новый пост - создание */
+            if (it.id == 0L) { // это новый пост - создание
                 activityMainBinding.groupEditHeader.visibility = View.GONE // группа с отменой редактирования невидима
                 return@observe
             } else {
@@ -73,24 +88,26 @@ class MainActivity : AppCompatActivity() {
             activityMainBinding.content.requestFocus()
             activityMainBinding.content.setText(it.content)
         }
+         */
 
+        /*
         activityMainBinding.save.setOnClickListener{
             with(activityMainBinding.content) {
                 val content = text?.toString()
                 if (content.isNullOrBlank()) {
-                    Toast.makeText(this@MainActivity, R.string.empty_post_error, Toast.LENGTH_SHORT).show() /* "всплывашка" с предупреждением о пустом тексте */
-                    return@setOnClickListener  /* через @ собаку возвращается значение лямбда-функции */
+                    Toast.makeText(this@MainActivity, R.string.empty_post_error, Toast.LENGTH_SHORT).show() // "всплывашка" с предупреждением о пустом тексте
+                    return@setOnClickListener  // через @ собаку возвращается значение лямбда-функции
                 }
-
                 viewModel.changeContent(content)
                 viewModel.save()
 
-                /* возвращаем все "как было" : */
+                // возвращаем все "как было" :
                 setText("")
                 clearFocus()
                 AndroidUtils.hideKeyboard(this)
             }
         }
+        */
 
         /* добавляем поведение для "своей" кнопки отмены редактирования: */
         activityMainBinding.editCancel.setOnClickListener {
@@ -117,6 +134,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         activityMainBinding.list.adapter = adapter
+
+        /* событие на кнопку добавления нового поста: */
+        activityMainBinding.add.setOnClickListener {
+            newPostContract.launch(Unit)
+        }
     }
 
 

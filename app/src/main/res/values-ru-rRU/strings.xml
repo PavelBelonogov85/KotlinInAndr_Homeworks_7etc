@@ -11,4 +11,7 @@
     <string name="menu_descr">Меню</string>
     <string name="like_descr">Нравится</string>
     <string name="shares_descr">Поделиться</string>
+    <string name="chooser_share_post">Поделиться этим постом</string>
+    <string name="error_empty_content">Text have to be not empty</string>
+    <string name="add_new_post">Добавить новый пост</string>
 </resources>

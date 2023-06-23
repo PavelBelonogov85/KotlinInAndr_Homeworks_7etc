@@ -17,7 +17,7 @@ typealias OnRemoveListener = (Post) -> Unit*/
 /* чтобы не создавать на каждый слушатель переменную и не тащить их все, используем другой подход - через интерфйс: */
 interface PostListener {
     fun onLike(post: Post)
-    fun onShare(post: Post)
+    fun onShare(post: Post) {}
     fun onRemove(post: Post)
     fun onEdit(post: Post)
 } /* и на все события создаем только одну переменную слушателя */

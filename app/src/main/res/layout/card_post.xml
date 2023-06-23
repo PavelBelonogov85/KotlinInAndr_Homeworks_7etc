@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <ImageView
         android:id="@+id/avatar"
@@ -31,7 +31,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/menu"
-        style="@style/buttonMoreStyle2"
+        style="@style/ButtonMoreStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/small_text_margin"
@@ -114,7 +114,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/shares_icon"
-        style="@style/smallButtonsStyle"
+        style="@style/SmallButtonsStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/small_text_margin"
