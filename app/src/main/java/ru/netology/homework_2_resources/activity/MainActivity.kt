@@ -71,7 +71,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onEdit(post: Post) {
-                    viewModel.edit(post)
+                    // viewModel.edit(post) // старая реализация
+                    newPostContract.launch(post.content) // передаем содержимое текущего поста в переменную контракта, чтобы сделать интент новой активити и передать в нее текст для редактирования
                 }
             }
         )
@@ -137,7 +138,7 @@ class MainActivity : AppCompatActivity() {
 
         /* событие на кнопку добавления нового поста: */
         activityMainBinding.add.setOnClickListener {
-            newPostContract.launch(Unit)
+            newPostContract.launch("") // передаем пустую строку в переменную контракта, чтобы сделать интент новой активити с пустым входным параметром
         }
     }
 

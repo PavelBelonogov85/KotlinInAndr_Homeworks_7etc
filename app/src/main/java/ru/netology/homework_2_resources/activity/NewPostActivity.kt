@@ -15,20 +15,24 @@ class NewPostActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        val incomingText = intent?.getStringExtra(Intent.EXTRA_TEXT) // смотрим на входящий текст
+        binding.content.setText(incomingText)
+
         binding.ok.setOnClickListener {
             val text = binding.content.text.toString()
             if (text.isBlank()) {
                 setResult(RESULT_CANCELED)
             } else {
                 setResult(RESULT_OK, Intent().apply {
-                                                    putExtra(Intent.EXTRA_TEXT, text)})
+                putExtra(Intent.EXTRA_TEXT, text)})
             }
             finish()
         }
     }
 
-    object Contract: ActivityResultContract<Unit, String?>() {
-        override fun createIntent(context: Context, input: Unit) = Intent(context, NewPostActivity::class.java)
+    object Contract: ActivityResultContract<String, String?>() {
+        override fun createIntent(context: Context, input: String) =
+            Intent(context, NewPostActivity::class.java).putExtra(Intent.EXTRA_TEXT, input) // создаем новый интент и тут же передаем в него переменную input типа String
 
         override fun parseResult(resultCode: Int, intent: Intent?) = intent?.getStringExtra(Intent.EXTRA_TEXT)
 
