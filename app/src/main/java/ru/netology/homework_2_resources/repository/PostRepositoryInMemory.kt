@@ -21,7 +21,8 @@ class PostRepositoryInMemory : PostRepository {
         likedByMe = false,
         likes = 999,
         shares = 10_999_997,
-        views = 1_256_000_000
+        views = 1_256_000_000,
+        videoLink = ""
         ),
         Post(
             id = ++nextId,
@@ -31,7 +32,8 @@ class PostRepositoryInMemory : PostRepository {
             likedByMe = false,
             likes = 999,
             shares = 10_999_997,
-            views = 1_256_000_000
+            views = 1_256_000_000,
+            videoLink = ""
         ),
         Post(
             id = ++nextId,
@@ -41,7 +43,8 @@ class PostRepositoryInMemory : PostRepository {
             likedByMe = false,
             likes = 999,
             shares = 10_999_997,
-            views = 1_256_000_000
+            views = 1_256_000_000,
+            videoLink = "https://www.youtube.com/watch?v=CwC0ave1YwA"
         )
     ).reversed() /* "переворачиваем" список так, чтобы id шли по убыванию */
 
@@ -95,7 +98,8 @@ class PostRepositoryInMemory : PostRepository {
                     likedByMe = false,
                     likes = 0,
                     shares = 0,
-                    views = 0
+                    views = 0,
+                    videoLink = ""
                 )
             ) + posts
             data.value = posts

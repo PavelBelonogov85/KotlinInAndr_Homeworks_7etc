@@ -1,12 +1,16 @@
 package ru.netology.homework_2_resources.activity
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import ru.netology.homework_2_resources.R
 import ru.netology.homework_2_resources.adapter.PostAdapter
 import ru.netology.homework_2_resources.adapter.PostListener
@@ -73,6 +77,29 @@ class MainActivity : AppCompatActivity() {
                 override fun onEdit(post: Post) {
                     // viewModel.edit(post) // старая реализация
                     newPostContract.launch(post.content) // передаем содержимое текущего поста в переменную контракта, чтобы сделать интент новой активити и передать в нее текст для редактирования
+                }
+
+                override fun onPlayVideo(post: Post) {
+                    /* Почему вот это вот все (ниже) нельзя написать в PostViewHolder прямо в video.setOnClickListener : */
+                    val parsedUrl = Uri.parse(post.videoLink)
+                    val intent = Intent().apply {
+                        action = Intent.ACTION_VIEW; // стандартный action для музыки или видео
+                        putExtra(Intent.ACTION_VIEW, parsedUrl) // Intent.EXTRA_REFERRER ?
+                        type="text/plain" // для настоящего видео было бы "video/*" ?
+                    }
+                    val onVideoClickIntent = Intent.createChooser(intent, "Play video")
+
+                    // попытаемся проверить, есть ли ЧЕМ открывать видео:
+                    val activityThatShouldBeRun = intent.resolveActivity(packageManager) // Откуда здесь взялся packageManager? разве его не надо сначала получить из getPackageManager() ?
+                    val listOfAvailableActivities:List<ResolveInfo> = packageManager.queryIntentActivities(intent, 0)
+                    if ((activityThatShouldBeRun != null) || (!listOfAvailableActivities.isEmpty())) {
+                        // все отлично, открываем в приложении
+                        startActivity(onVideoClickIntent)
+                    } else {
+                        // приложения для просмотра видео нет, откроем ссылку в браузере:
+                        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(post.videoLink));
+                        startActivity(browserIntent);
+                    }
                 }
             }
         )

@@ -1,7 +1,9 @@
 package ru.netology.homework_2_resources.adapter
 
+import android.content.Intent
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import ru.netology.homework_2_resources.R
 import ru.netology.homework_2_resources.databinding.CardPostBinding
@@ -25,7 +27,6 @@ class PostViewHolder ( /* "держит" ссылку на конкретный 
             published.text = post.published
             content.text = post.content
             avatar.setImageResource(R.drawable.ic_launcher_foreground)
-
             viewsText.text = StringsVisability.getCoolNumeralString(post.views)
 
             // ! binding самопроизвольно меняет id элементов из snake_case в camelCase !
@@ -47,6 +48,18 @@ class PostViewHolder ( /* "держит" ссылку на конкретный 
             binding.sharesIcon.setOnClickListener {
                 //viewModel.share(post.id)
                 listener.onShare(post)
+            }
+
+            /* работаем с "видео": */
+            if (post.videoLink!="") {
+                binding.video.setImageResource(R.drawable.dummy_img) // не правильно брать картинку ДАННЫХ из drawable
+                videoButton.setImageResource(R.drawable.youtube_btn)
+            } else {
+                binding.video.setImageResource(0)
+                videoButton.setImageResource(0)
+            }
+            video.setOnClickListener {
+                listener.onPlayVideo(post) /* см. https://developer.android.com/guide/components/intents-common#Music */
             }
 
             /* создаем меню: */

@@ -20,6 +20,7 @@ interface PostListener {
     fun onShare(post: Post) {}
     fun onRemove(post: Post)
     fun onEdit(post: Post)
+    fun onPlayVideo(post: Post)
 } /* и на все события создаем только одну переменную слушателя */
 
 class PostAdapter( /* связывает набор данных с набором View. "Предоставляет" очередной View элементу данных с помощью ViewHolder */
