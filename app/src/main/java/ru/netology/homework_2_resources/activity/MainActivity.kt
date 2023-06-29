@@ -75,12 +75,12 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onEdit(post: Post) {
-                    // viewModel.edit(post) // старая реализация
+                    viewModel.edit(post) // начинаем редактировать пост, чтобы вьюмодель (PostViewModel) "запомнила" текущий пост в переменной
                     newPostContract.launch(post.content) // передаем содержимое текущего поста в переменную контракта, чтобы сделать интент новой активити и передать в нее текст для редактирования
                 }
 
                 override fun onPlayVideo(post: Post) {
-                    /* Почему вот это вот все (ниже) нельзя написать в PostViewHolder прямо в video.setOnClickListener : */
+                    /* Наличие слушателя (video.setOnClickListener) мы прописали в адаптере (PostViewHolder), а тут уже пишем всю логику его поведения, так, чтобы адаптер можно было использовать на любых экранах (activity) с разной логикой поведения */
                     val parsedUrl = Uri.parse(post.videoLink)
                     val intent = Intent().apply {
                         action = Intent.ACTION_VIEW; // стандартный action для музыки или видео
@@ -90,8 +90,10 @@ class MainActivity : AppCompatActivity() {
                     val onVideoClickIntent = Intent.createChooser(intent, "Play video")
 
                     // попытаемся проверить, есть ли ЧЕМ открывать видео:
-                    val activityThatShouldBeRun = intent.resolveActivity(packageManager) // Откуда здесь взялся packageManager? разве его не надо сначала получить из getPackageManager() ?
-                    val listOfAvailableActivities:List<ResolveInfo> = packageManager.queryIntentActivities(intent, 0)
+                    val activityThatShouldBeRun =
+                        intent.resolveActivity(packageManager) // packageManager - это getPackageManager() - Это особенность вызовов Java из Kotlin. Методы-геттеры воспринимаются как свойства
+                    val listOfAvailableActivities: List<ResolveInfo> =
+                        packageManager.queryIntentActivities(intent, 0)
                     if ((activityThatShouldBeRun != null) || (!listOfAvailableActivities.isEmpty())) {
                         // все отлично, открываем в приложении
                         startActivity(onVideoClickIntent)
