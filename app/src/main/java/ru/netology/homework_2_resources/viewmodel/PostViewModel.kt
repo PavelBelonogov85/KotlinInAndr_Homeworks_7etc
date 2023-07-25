@@ -1,5 +1,7 @@
 package ru.netology.homework_2_resources.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,10 +18,10 @@ private val empty = Post(
     videoLink = ""
 )
 
-class PostViewModel: ViewModel() {
+class PostViewModel(application: Application): AndroidViewModel(application) {
     /* Тут создаем класс, наследующий от ViewModel() который будет "ловить" события изменения
     в данных */
-    private val repository: PostRepository = PostRepositoryInMemory()
+    private val repository: PostRepository = PostRepositoryInMemory(application)
 
     val data: LiveData<List<Post>> = repository.getData()
     fun likeById(id: Long) = repository.likeById(id)

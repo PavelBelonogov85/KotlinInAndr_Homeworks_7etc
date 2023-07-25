@@ -28,22 +28,6 @@ class MainActivity : AppCompatActivity() {
         val activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
-        //////
-        // читаем данные поста из JSON:
-        /*
-        val fileJSON = File("./src/main/res/raw/posts.json") // почему не открывается файл??
-        var jsonString:String
-        FileReader(fileJSON).use {
-            val chars = CharArray(fileJSON.length().toInt())
-            it.read(chars)
-            jsonString = String(chars)
-        }
-        val mapper = jacksonObjectMapper()
-        */
-        // вот на этой строке ошибка:
-        // val postFromJson = mapper.readValue<Post>(jsonString) // ошибка "None of the following functions can be called with the arguments supplied."
-        //////
-
         val viewModel: PostViewModel by viewModels() // функция «by viewModels()» означает, что сколько бы раз activity не пересоздавался, мы будем получать одну и ту же ссылку на одну и ту же модель (ViewModel)
 
         val newPostContract = registerForActivityResult(NewPostActivity.Contract) {result ->
